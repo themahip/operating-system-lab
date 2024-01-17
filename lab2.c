@@ -31,9 +31,8 @@ int main()
     {
         for (int j = 0; j < 5 - i - 1; ++j)
         {
-            if (processes[j].arrivalTime > processes[j + 1].arrivalTime)
+            if (processes[j].burstTime > processes[j + 1].burstTime)
             {
-                // Swap the processes
                 struct Process temp = processes[j];
                 processes[j] = processes[j + 1];
                 processes[j + 1] = temp;
@@ -41,7 +40,7 @@ int main()
         }
     }
 
-    printf("------------------------------------------------------------------------\n");
+    printf("------------------------------------------------------------------------––\n");
     printf("| Process | Arrival Time | Burst Time | Completion Time | Turnaround Time | Waiting Time |\n");
     printf("------------------------------------------------------------------------\n");
 
@@ -51,11 +50,16 @@ int main()
 
     for (int i = 0; i < 5; ++i)
     {
-        printf("| %-7d | %-13d | %-10d | %-16d | %-15d | %-12d |\n",
+        printf("| %-7d | %-13d | %-10d | %-16d | %-15d | ",
                processes[i].processNumber, processes[i].arrivalTime,
                processes[i].burstTime, completionTime,
-               (completionTime - processes[i].arrivalTime),
-               (completionTime - processes[i].arrivalTime - processes[i].burstTime));
+               (completionTime - processes[i].arrivalTime));
+
+        waitingTime = (completionTime - processes[i].arrivalTime - processes[i].burstTime) >= 0
+                          ? (completionTime - processes[i].arrivalTime - processes[i].burstTime)
+                          : 0;
+
+        printf("%-12d |\n", waitingTime);
 
         completionTime = (completionTime < processes[i].arrivalTime) ? processes[i].arrivalTime : completionTime;
         completionTime += processes[i].burstTime;
